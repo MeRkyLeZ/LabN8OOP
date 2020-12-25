@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace LabN8OOP
 {
+
+
     public abstract class CShapes
     {
         public abstract void move(int dx, int dy);  // Смещение объекта
@@ -215,22 +217,15 @@ namespace LabN8OOP
             }
             return minsize;
         }
+
     }
 
     public abstract class Figure : CShapes
     {
-        public abstract int GetDistance(int x, int y);   // Вычисление дистанции между точками
-        public abstract int getR(); // Получение размера
-        public abstract int getX(); // Получение X
-        public abstract int getY(); // Получение Y
-    }
-
-    public class CCircle : Figure   // Объект
-    {
-        private int x, y, R;
-        private bool selected;
-        private Color col;
-        public CCircle()    // Конструктор
+        protected int x, y, R;
+        protected bool selected;
+        protected Color col;
+        public Figure()
         {
             x = 0;
             y = 0;
@@ -238,39 +233,11 @@ namespace LabN8OOP
             selected = true;
             col = Color.Black;
         }
-        public CCircle(int x, int y, int R) // Конструктор
-        {
-            this.x = x;
-            this.y = y;
-            this.R = R;
-            selected = true;
-            col = Color.Black;
-        }
-        ~CCircle()  // Деструктор
-        {
-        }
-
         public override void move(int dx, int dy)
         {
             x += dx;
             y += dy;
         }
-
-        public override void draw(Graphics g)
-        {
-            Pen pen = new Pen(col);    // Кисть
-            Brush brush = new SolidBrush(Color.Black); // Заливка
-            if (selected == false)
-            {
-                g.DrawEllipse(pen, x - R, y - R, R * 2, R * 2);  // Рисуем элемент
-            }
-            else
-            {
-
-                g.FillEllipse(brush, x - R, y - R, R * 2, R * 2);    // Заливаем элемент
-            }
-        }
-
         public override bool getSelected()
         {
             return selected;
@@ -299,12 +266,12 @@ namespace LabN8OOP
             return (x + R < (X1 + X2) && x - R > X1 && y + R < (Y1 + Y2) && y - R > Y1);
         }
 
-        public override int GetDistance(int x, int y)
+        public int GetDistance(int x, int y)
         {
             return ((int)Math.Pow((this.x - x), 2) + (int)Math.Pow((this.y - y), 2));
         }
 
-        public override int getR()
+        public int getR()
         {
             return R;
         }
@@ -315,12 +282,12 @@ namespace LabN8OOP
                 R += dR;
         }
 
-        public override int getX()
+        public int getX()
         {
             return x;
         }
 
-        public override int getY()
+        public int getY()
         {
             return y;
         }
@@ -328,6 +295,45 @@ namespace LabN8OOP
         public override void unSelected()
         {
             selected = false;
+        }
+    }
+
+
+
+    public class CCircle : Figure   // Объект
+    {
+        public CCircle()    // Конструктор
+        {
+            x = 0;
+            y = 0;
+            R = 0;
+            selected = true;
+            col = Color.Black;
+        }
+        public CCircle(int x, int y, int R) // Конструктор
+        {
+            this.x = x;
+            this.y = y;
+            this.R = R;
+            selected = true;
+            col = Color.Black;
+        }
+        ~CCircle()  // Деструктор
+        {
+        }
+        public override void draw(Graphics g)
+        {
+            Pen pen = new Pen(col);    // Кисть
+            Brush brush = new SolidBrush(Color.Black); // Заливка
+            if (selected == false)
+            {
+                g.DrawEllipse(pen, x - R, y - R, R * 2, R * 2);  // Рисуем элемент
+            }
+            else
+            {
+
+                g.FillEllipse(brush, x - R, y - R, R * 2, R * 2);    // Заливаем элемент
+            }
         }
 
         public override void save(StreamWriter stream)
@@ -348,13 +354,12 @@ namespace LabN8OOP
             col = Color.FromArgb(Convert.ToInt32(str[0]), Convert.ToInt32(str[1]), Convert.ToInt32(str[2]));
             selected = false;
         }
+
+
     }
 
     class CSquare : Figure   // Объект
     {
-        private int x, y, R;
-        private bool selected;
-        private Color col;
         public CSquare()    // Конструктор
         {
             x = 0;
@@ -377,12 +382,6 @@ namespace LabN8OOP
 
         }
 
-        public override void move(int dx, int dy)
-        {
-            x += dx;
-            y += dy;
-        }
-
         public override void draw(Graphics g)
         {
             Pen pen = new Pen(col);    // Кисть
@@ -395,66 +394,6 @@ namespace LabN8OOP
             {
                 g.FillRectangle(brush, x - R, y - R, R * 2, R * 2);    // Заливаем элемент
             }
-        }
-
-        public override bool getSelected()
-        {
-            return selected;
-        }
-
-        public override void setColor(Color col)
-        {
-            this.col = col;
-        }
-
-        public override void setSelected(int x, int y)
-        {
-            if (GetDistance(x, y) <= (int)Math.Pow(getR(), 2))
-            {
-                selected = true;
-            }
-        }
-
-        public override void setSelected()
-        {
-            selected = true;
-        }
-
-        public override bool CheckIn(int X1, int X2, int Y1, int Y2)
-        {
-
-            return (x + R < (X1 + X2) && x - R > X1 && y + R < (Y1 + Y2) && y - R > Y1);
-
-        }
-
-        public override int GetDistance(int x, int y)
-        {
-            return ((int)Math.Pow((this.x - x), 2) + (int)Math.Pow((this.y - y), 2));
-        }
-        public override int getR()
-        {
-            return R;
-        }
-
-        public override void setSize(int dR)
-        {
-            if (R + dR > 0)
-                R += dR;
-        }
-
-        public override int getX()
-        {
-            return x;
-        }
-
-        public override int getY()
-        {
-            return y;
-        }
-
-        public override void unSelected()
-        {
-            selected = false;
         }
 
         public override void save(StreamWriter stream)
@@ -475,13 +414,12 @@ namespace LabN8OOP
             col = Color.FromArgb(Convert.ToInt32(str[0]), Convert.ToInt32(str[1]), Convert.ToInt32(str[2]));
             selected = false;
         }
+
+
     }
 
     class CTriangle : Figure    // Объект
     {
-        private int x, y, R;
-        private bool selected;
-        private Color col;
         public CTriangle()  // Конструктор
         {
             x = 0;
@@ -501,12 +439,6 @@ namespace LabN8OOP
         ~CTriangle()    // Деструктор
         {
 
-        }
-
-        public override void move(int dx, int dy)
-        {
-            x += dx;
-            y += dy;
         }
 
         public override void draw(Graphics g)
@@ -530,63 +462,6 @@ namespace LabN8OOP
             }
         }
 
-        public override bool getSelected()
-        {
-            return selected;
-        }
-
-        public override void setColor(Color col)
-        {
-            this.col = col;
-        }
-
-        public override void setSelected(int x, int y)
-        {
-            if (GetDistance(x, y) <= (int)Math.Pow(getR(), 2))
-            {
-                selected = true;
-            }
-        }
-
-        public override void setSelected()
-        {
-            selected = true;
-        }
-        public override bool CheckIn(int X1, int X2, int Y1, int Y2)
-        {
-            return (x + R < (X1 + X2) && x - R > X1 && y + R < (Y1 + Y2) && y - R > Y1);
-        }
-
-        public override int GetDistance(int x, int y)
-        {
-            return ((int)Math.Pow((this.x - x), 2) + (int)Math.Pow((this.y - y), 2));
-        }
-        public override int getR()
-        {
-            return R;
-        }
-
-        public override void setSize(int dR)
-        {
-            if (R + dR > 0)
-                R += dR;
-        }
-
-        public override int getX()
-        {
-            return x;
-        }
-
-        public override int getY()
-        {
-            return y;
-        }
-
-        public override void unSelected()
-        {
-            selected = false;
-        }
-
         public override void save(StreamWriter stream)
         {
             stream.WriteLine("CTriangle");
@@ -605,5 +480,7 @@ namespace LabN8OOP
             col = Color.FromArgb(Convert.ToInt32(str[0]), Convert.ToInt32(str[1]), Convert.ToInt32(str[2]));
             selected = false;
         }
+
+
     }
 }

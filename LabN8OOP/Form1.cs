@@ -14,11 +14,15 @@ namespace LabN8OOP
     {
         Repository repos = new Repository(10);   // Хранилище объектов
         int R = 50; // Размер фигуры
+        TreeViewObj tree;
 
 
         public Form1()
         {
             InitializeComponent();
+            treeView1.Nodes.Add(new TreeNode("Хранилище"));
+            tree = new TreeViewObj(treeView1);
+            repos.addObserver(tree);
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e) // Отрисовка формы

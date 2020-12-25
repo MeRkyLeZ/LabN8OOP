@@ -4,11 +4,75 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Windows.Forms;
 
 namespace LabN8OOP
 {
-    public class Data
+
+    public abstract class CObserver
+    {
+        public abstract void onSubjectChanged(CSubject who);
+    }
+
+    public class CSubject
+    {
+        private List<CObserver> observers;
+
+        public CSubject()
+        {
+            observers = new List<CObserver>();
+        }
+
+        public void addObserver(CObserver o)
+        {
+            observers.Add(o);
+        }
+
+        public void notifyEveryOne()
+        {
+            for (int i = 0; i < observers.Count; ++i)
+            {
+                observers[i].onSubjectChanged(this);
+            }
+        }
+    }
+
+    public class TreeViewObj : CObserver
+    {
+        private TreeView tree;
+        public TreeViewObj(TreeView treeView)
+        {
+            tree = treeView;
+        }
+
+        public override void onSubjectChanged(CSubject who)
+        {
+            tree.Nodes[0].Nodes.Clear();
+            Repository rep = ((Repository)who);
+            for (int i = 0; i < rep.getSize(); ++i)
+            {
+                if (!rep.isNull(i))
+                {
+                    processNode(tree.TopNode, rep.getObject(i));
+                }
+            }
+        }
+
+        private void processNode(TreeNode tn, CShapes o)
+        {
+            tn.Nodes.Add(new TreeNode(o.GetType().Name));
+            if (o is Group)
+            {
+                for (int j = 0; j < ((Group)o).getCount(); ++j)
+                {
+                    processNode(tn.Nodes[tn.Nodes.Count - 1], ((Group)o).getGroups()[j]);
+                }
+            }
+
+        }
+    }
+
+    public class Data : CSubject
     {
         protected CShapes[] arr;    // Массив элементов
         protected int size;   // Размер массива
@@ -41,6 +105,7 @@ namespace LabN8OOP
                 }
             }
             sr.Close(); // Закрываем файл
+            notifyEveryOne();
         }
 
         public void saveShapes(string filename) // Сохранение фигур
@@ -60,7 +125,7 @@ namespace LabN8OOP
     }
 
 
-    class Repository : Data    // Хранилище
+    class Repository : Data   // Хранилище
     {
         public Repository() // Конструктор
         {
@@ -86,6 +151,7 @@ namespace LabN8OOP
         {
             arr[pos] = null;
             count--;
+            notifyEveryOne();
         }
         public CShapes addObject(CShapes point) // Добавление элемента
         {
@@ -106,6 +172,7 @@ namespace LabN8OOP
             }
             arr[pos] = point;
             count++;
+            notifyEveryOne();
             return arr[pos];
         }
         public void setObject(int pos, CShapes point) // Изменение элемента
@@ -123,6 +190,7 @@ namespace LabN8OOP
                 count++;
             }
             arr[pos] = point;
+            notifyEveryOne();
         }
         public CShapes getObject(int pos)    // Получение элемента
         {
