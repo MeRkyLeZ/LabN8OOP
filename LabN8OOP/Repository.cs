@@ -9,26 +9,26 @@ using System.Windows.Forms;
 namespace LabN8OOP
 {
 
-    public abstract class CObserver
+    public abstract class CObserver // Наблюдатель
     {
-        public abstract void onSubjectChanged(CSubject who);
+        public abstract void onSubjectChanged(CSubject who);    // Обращение
     }
 
-    public class CSubject
+    public class CSubject   // Объект наблюдение
     {
-        private List<CObserver> observers;
+        private List<CObserver> observers;  // Список наблюдателей
 
         public CSubject()
         {
             observers = new List<CObserver>();
         }
 
-        public void addObserver(CObserver o)
+        public void addObserver(CObserver o)    // Добавление наблюдателей
         {
             observers.Add(o);
         }
 
-        public void notifyEveryOne()
+        public void notifyEveryOne()    // Обращение ко всем наблюдателям
         {
             for (int i = 0; i < observers.Count; ++i)
             {
@@ -37,17 +37,17 @@ namespace LabN8OOP
         }
     }
 
-    public class TreeViewObj : CObserver
+    public class TreeViewObj : CObserver    // Дерево-наблюдатель
     {
-        private TreeView tree;
-        private Repository repos;
+        private TreeView tree;  // Дерево
+        private Repository repos;   // Хранилище
         public TreeViewObj(TreeView treeView, Repository repository)
         {
             tree = treeView;
             repos = repository;
         }
 
-        public override void onSubjectChanged(CSubject who)
+        public override void onSubjectChanged(CSubject who) // Изменение хранилища
         {
             tree.Nodes[0].Nodes.Clear();
 
@@ -61,7 +61,7 @@ namespace LabN8OOP
             SetChecked();
         }
 
-        private void processNode(TreeNode tn, CShapes o)
+        private void processNode(TreeNode tn, CShapes o)    // Заполнение дерева
         {
             tn.Nodes.Add(new TreeNode(o.GetType().Name));
             if (o is Group)
@@ -74,7 +74,7 @@ namespace LabN8OOP
 
         }
 
-        private void SetChecked()
+        private void SetChecked()   // Заполнение дерева значениями
         {
             int pos = 0;
             for (int i = 0; i < repos.getSize(); ++i)
@@ -88,7 +88,7 @@ namespace LabN8OOP
             }
         }
 
-        public void CopyChecked()
+        public void CopyChecked()   // Заполнение хранилища из дерева
         {
             int pos = 0;
             for (int i = 0; i < repos.getSize(); ++i)

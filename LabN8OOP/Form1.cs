@@ -14,14 +14,14 @@ namespace LabN8OOP
     {
         Repository repos = new Repository(10);   // Хранилище объектов
         int R = 50; // Размер фигуры
-        TreeViewObj tree;
+        TreeViewObj tree;   // Наблюдатель за фигурами
 
 
         public Form1()
         {
             InitializeComponent();
             tree = new TreeViewObj(treeView1, repos);
-            repos.addObserver(tree);
+            repos.addObserver(tree);    // Добавление наблюдателя
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e) // Отрисовка формы
@@ -91,7 +91,7 @@ namespace LabN8OOP
                     if (fig != null && fig.CheckIn(0, pictureBox1.Width, 0, pictureBox1.Height))
                     {
                         fig.addObserver(tree);
-                        repos.addObject(fig);
+                        repos.addObject(fig);   // Добавление наблюдателя
                         unCheckedMenu();    // Снимаем выделения в меню
                     }
                 }
@@ -123,7 +123,7 @@ namespace LabN8OOP
             треугольникToolStripMenuItem.Checked = true;
         }
 
-        private void липкийОбъектToolStripMenuItem_Click(object sender, EventArgs e)
+        private void липкийОбъектToolStripMenuItem_Click(object sender, EventArgs e)    // Запоминаем объект для создания
         {
             unCheckedMenu();
             липкийОбъектToolStripMenuItem.Checked = true;
@@ -286,7 +286,7 @@ namespace LabN8OOP
 
         private void создатьГруппуToolStripMenuItem_Click(object sender, EventArgs e)   // Создать группу
         {
-            Group gr = new Group(1);    // Группа
+            Group gr = new Group(0);    // Группа
             for (int i = 0; i < repos.getSize(); ++i)
             {
                 if (!repos.isNull(i))
@@ -296,7 +296,8 @@ namespace LabN8OOP
                         repos.delObject(i);
                     }
             }
-            repos.addObject(gr);    // Добавляем в хранилище
+            if (gr.getCount() != 0)
+                repos.addObject(gr);    // Добавляем в хранилище
         }
 
         private void разгруппироватьToolStripMenuItem_Click(object sender, EventArgs e) // Удалить группу
@@ -327,7 +328,7 @@ namespace LabN8OOP
             pictureBox1.Refresh();	// Обновление формы
         }
 
-        private void addObs(CShapes arr)
+        private void addObs(CShapes arr)    // Добавление наблюдателей
         {
             if (arr is Group)
                 for (int i = 0; i < ((Group)arr).getCount(); ++i)
@@ -353,7 +354,7 @@ namespace LabN8OOP
             pictureBox1.Refresh();	// Обновление формы
         }
 
-        private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)   // Выделяем фигуру в дереве
         {
             if (treeView1.TopNode != e.Node)
                 e.Node.Checked = true;
@@ -361,7 +362,7 @@ namespace LabN8OOP
             pictureBox1.Refresh();	// Обновление формы
         }
 
-        private void treeView1_AfterCheck(object sender, TreeViewEventArgs e)
+        private void treeView1_AfterCheck(object sender, TreeViewEventArgs e)   // Выделяем выбранные фигуры
         {
             if (e.Node.Checked)
             {
@@ -373,7 +374,7 @@ namespace LabN8OOP
             }
         }
 
-        private void CheckDist()
+        private void CheckDist()    // Добавление наблюдателей к липкой фигуре
         {
             for (int i = 0; i < repos.getSize(); ++i)
             {
@@ -382,9 +383,9 @@ namespace LabN8OOP
                     ((CCirclelip)repos.getObject(i)).delObs();
                     for (int j = 0; j < repos.getSize(); ++j)
                     {
-                        if (i != j && repos.getObject(j) is Figure)
+                        if (i != j && repos.getObject(j) is Figure && !(repos.getObject(j) is CCirclelip))
                         {
-                            if (((Figure)repos.getObject(i)).GetDistance(((Figure)repos.getObject(j)).getX(), ((Figure)repos.getObject(j)).getY()) <= (int)Math.Pow(((Figure)repos.getObject(i)).getR()+ ((Figure)repos.getObject(j)).getR(), 2))
+                            if (((Figure)repos.getObject(i)).GetDistance(((Figure)repos.getObject(j)).getX(), ((Figure)repos.getObject(j)).getY()) <= (int)Math.Pow(((Figure)repos.getObject(i)).getR() + ((Figure)repos.getObject(j)).getR(), 2))
                             {
                                 ((CCirclelip)repos.getObject(i)).addObserver(repos.getObject(j));
                             }

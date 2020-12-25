@@ -24,7 +24,7 @@ namespace LabN8OOP
         public abstract void save(StreamWriter stream); // Сохранение
         public abstract void load(StreamReader stream); // Загрузка
 
-        public abstract void MovLip(CCirclelip who, int dx, int dy);
+        public abstract void MovLip(CCirclelip who, int dx, int dy);    // Движение за липким объектом
     }
 
     public class Group : CShapes    // Группа
@@ -34,7 +34,7 @@ namespace LabN8OOP
         private bool selected;
         private CShapes[] group;
 
-        public Group(int size)
+        public Group(int size)  // Конструктор
         {
             this.size = size;
             count = 0;
@@ -42,7 +42,7 @@ namespace LabN8OOP
             selected = true;
         }
 
-        ~Group()
+        ~Group()    // Деструктор
         {
             for (int i = 0; i < size; ++i)
             {
@@ -561,12 +561,12 @@ namespace LabN8OOP
             selected = false;
         }
 
-        public void addObserver(CShapes o)
+        public void addObserver(CShapes o)  // Добавление наблюдателя
         {
             observers.Add(o);
         }
 
-        public void delObs()
+        public void delObs()    // Удаление наблюдателей
         {
             observers.Clear();
         }
@@ -575,22 +575,10 @@ namespace LabN8OOP
         {
             x += dx;
             y += dy;
-           for (int i = 0; i < observers.Count; ++i)
+            for (int i = 0; i < observers.Count; ++i)    // Смещение наблюдателей
             {
                 observers[i].MovLip(this, dx, dy);
             }
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
 }
