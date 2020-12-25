@@ -83,6 +83,10 @@ namespace LabN8OOP
                     {
                         fig = new CTriangle(x, y, R);
                     }
+                    else if (липкийОбъектToolStripMenuItem.Checked)
+                    {
+                        fig = new CCirclelip(x, y, R);
+                    }
                     else fig = null;
                     if (fig != null && fig.CheckIn(0, pictureBox1.Width, 0, pictureBox1.Height))
                     {
@@ -99,6 +103,7 @@ namespace LabN8OOP
             кругToolStripMenuItem.Checked = false;
             квадратToolStripMenuItem.Checked = false;
             треугольникToolStripMenuItem.Checked = false;
+            липкийОбъектToolStripMenuItem.Checked = false;
         }
         private void кругToolStripMenuItem_Click(object sender, EventArgs e)    // Запоминаем объект для создания
         {
@@ -118,6 +123,12 @@ namespace LabN8OOP
             треугольникToolStripMenuItem.Checked = true;
         }
 
+        private void липкийОбъектToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            unCheckedMenu();
+            липкийОбъектToolStripMenuItem.Checked = true;
+        }
+
         private void увеличитьToolStripMenuItem_Click(object sender, EventArgs e)   // Увеличение объекта
         {
             for (int i = 0; i < repos.getSize(); ++i)
@@ -131,6 +142,7 @@ namespace LabN8OOP
                     }
                 }
             }
+            CheckDist();
             pictureBox1.Refresh();	// Обновление формы
         }
         private void уменьшитьToolStripMenuItem_Click(object sender, EventArgs e)   // Уменьшение объекта
@@ -145,6 +157,7 @@ namespace LabN8OOP
                     }
                 }
             }
+            CheckDist();
             pictureBox1.Refresh();	// Обновление формы
         }
 
@@ -161,6 +174,7 @@ namespace LabN8OOP
                     }
                 }
             }
+            CheckDist();
             pictureBox1.Refresh();	// Обновление формы
         }
 
@@ -177,6 +191,7 @@ namespace LabN8OOP
                     }
                 }
             }
+            CheckDist();
             pictureBox1.Refresh();	// Обновление формы
         }
 
@@ -193,6 +208,7 @@ namespace LabN8OOP
                     }
                 }
             }
+            CheckDist();
             pictureBox1.Refresh();	// Обновление формы
         }
 
@@ -209,6 +225,7 @@ namespace LabN8OOP
                     }
                 }
             }
+            CheckDist();
             pictureBox1.Refresh();	// Обновление формы
         }
 
@@ -338,17 +355,14 @@ namespace LabN8OOP
 
         private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            e.Node.Checked = true;
+            if (treeView1.TopNode != e.Node)
+                e.Node.Checked = true;
             tree.CopyChecked();
             pictureBox1.Refresh();	// Обновление формы
         }
 
         private void treeView1_AfterCheck(object sender, TreeViewEventArgs e)
         {
-            if (treeView1.TopNode.Checked)
-            {
-                treeView1.TopNode.Checked = false;
-            }
             if (e.Node.Checked)
             {
                 e.Node.ForeColor = Color.Red;
@@ -356,6 +370,27 @@ namespace LabN8OOP
             else
             {
                 e.Node.ForeColor = Color.Black;
+            }
+        }
+
+        private void CheckDist()
+        {
+            for (int i = 0; i < repos.getSize(); ++i)
+            {
+                if (repos.getObject(i) is CCirclelip)
+                {
+                    ((CCirclelip)repos.getObject(i)).delObs();
+                    for (int j = 0; j < repos.getSize(); ++j)
+                    {
+                        if (i != j && repos.getObject(j) is Figure)
+                        {
+                            if (((Figure)repos.getObject(i)).GetDistance(((Figure)repos.getObject(j)).getX(), ((Figure)repos.getObject(j)).getY()) <= (int)Math.Pow(((Figure)repos.getObject(i)).getR()+ ((Figure)repos.getObject(j)).getR(), 2))
+                            {
+                                ((CCirclelip)repos.getObject(i)).addObserver(repos.getObject(j));
+                            }
+                        }
+                    }
+                }
             }
         }
     }

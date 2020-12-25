@@ -23,6 +23,8 @@ namespace LabN8OOP
         public abstract bool CheckIn(int X1, int X2, int Y1, int Y2);   // Проверка выхода за поле рисования
         public abstract void save(StreamWriter stream); // Сохранение
         public abstract void load(StreamReader stream); // Загрузка
+
+        public abstract void MovLip(CCirclelip who, int dx, int dy);
     }
 
     public class Group : CShapes    // Группа
@@ -197,6 +199,9 @@ namespace LabN8OOP
                     case "Group":
                         cs = new Group(1);
                         break;
+                    case "CCirclelip":
+                        cs = new CCirclelip(0, 0, 0);
+                        break;
                 }
                 addShape(cs);
                 group[i].load(stream);
@@ -220,7 +225,13 @@ namespace LabN8OOP
             return minsize;
         }
 
-
+        public override void MovLip(CCirclelip who, int dx, int dy)
+        {
+            for (int i = 0; i < getCount(); ++i)
+            {
+                group[i].move(dx, dy);
+            }
+        }
     }
 
     public abstract class Figure : CShapes
@@ -299,6 +310,11 @@ namespace LabN8OOP
         {
             selected = false;
         }
+
+        public override void MovLip(CCirclelip who, int dx, int dy)
+        {
+            move(dx, dy);
+        }
     }
 
 
@@ -358,8 +374,6 @@ namespace LabN8OOP
             col = Color.FromArgb(Convert.ToInt32(str[0]), Convert.ToInt32(str[1]), Convert.ToInt32(str[2]));
             selected = false;
         }
-
-
     }
 
     class CSquare : Figure   // Объект
@@ -487,4 +501,96 @@ namespace LabN8OOP
             selected = false;
         }
     }
+
+    public class CCirclelip : CCircle   // Объект
+    {
+        private List<CShapes> observers;
+        public CCirclelip()    // Конструктор
+        {
+            x = 0;
+            y = 0;
+            R = 0;
+            selected = true;
+            col = Color.Black;
+            observers = new List<CShapes>();
+        }
+        public CCirclelip(int x, int y, int R) // Конструктор
+        {
+            this.x = x;
+            this.y = y;
+            this.R = R;
+            selected = true;
+            col = Color.Black;
+            observers = new List<CShapes>();
+        }
+        ~CCirclelip()  // Деструктор
+        {
+        }
+        public override void draw(Graphics g)
+        {
+            Pen pen = new Pen(col);    // Кисть
+            Brush brush = new SolidBrush(Color.Black); // Заливка
+            if (selected == false)
+            {
+                g.DrawEllipse(pen, x - R, y - R, R * 2, R * 2);  // Рисуем элемент
+            }
+            else
+            {
+
+                g.FillEllipse(brush, x - R, y - R, R * 2, R * 2);    // Заливаем элемент
+            }
+            notifyEveryOne();
+        }
+
+        public override void save(StreamWriter stream)
+        {
+            stream.WriteLine("CCirclelip");
+            stream.WriteLine(x);
+            stream.WriteLine(y);
+            stream.WriteLine(R);
+            stream.WriteLine(col.R + "," + col.G + "," + col.B);
+        }
+
+        public override void load(StreamReader stream)
+        {
+            x = Convert.ToInt32(stream.ReadLine());
+            y = Convert.ToInt32(stream.ReadLine());
+            R = Convert.ToInt32(stream.ReadLine());
+            String[] str = stream.ReadLine().Split(','); ;
+            col = Color.FromArgb(Convert.ToInt32(str[0]), Convert.ToInt32(str[1]), Convert.ToInt32(str[2]));
+            selected = false;
+        }
+
+        public void addObserver(CShapes o)
+        {
+            observers.Add(o);
+        }
+
+        public void delObs()
+        {
+            observers.Clear();
+        }
+
+        public override void move(int dx, int dy)
+        {
+            x += dx;
+            y += dy;
+           for (int i = 0; i < observers.Count; ++i)
+            {
+                observers[i].MovLip(this, dx, dy);
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 }

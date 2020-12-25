@@ -259,6 +259,9 @@ namespace LabN8OOP
                 case "Group":
                     cs = new Group(1);
                     break;
+                case "CCirclelip":
+                    cs = new CCirclelip(0, 0, 0);
+                    break;
             }
             return cs;
         }

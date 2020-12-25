@@ -58,6 +58,7 @@ namespace LabN8OOP
             this.сохранитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.загрузитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.treeView1 = new System.Windows.Forms.TreeView();
+            this.липкийОбъектToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -90,7 +91,8 @@ namespace LabN8OOP
             this.фигурыToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.кругToolStripMenuItem,
             this.квадратToolStripMenuItem,
-            this.треугольникToolStripMenuItem});
+            this.треугольникToolStripMenuItem,
+            this.липкийОбъектToolStripMenuItem});
             this.фигурыToolStripMenuItem.Name = "фигурыToolStripMenuItem";
             this.фигурыToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
             this.фигурыToolStripMenuItem.Text = "Фигуры";
@@ -98,21 +100,21 @@ namespace LabN8OOP
             // кругToolStripMenuItem
             // 
             this.кругToolStripMenuItem.Name = "кругToolStripMenuItem";
-            this.кругToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.кругToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.кругToolStripMenuItem.Text = "Круг";
             this.кругToolStripMenuItem.Click += new System.EventHandler(this.кругToolStripMenuItem_Click);
             // 
             // квадратToolStripMenuItem
             // 
             this.квадратToolStripMenuItem.Name = "квадратToolStripMenuItem";
-            this.квадратToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.квадратToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.квадратToolStripMenuItem.Text = "Квадрат";
             this.квадратToolStripMenuItem.Click += new System.EventHandler(this.квадратToolStripMenuItem_Click);
             // 
             // треугольникToolStripMenuItem
             // 
             this.треугольникToolStripMenuItem.Name = "треугольникToolStripMenuItem";
-            this.треугольникToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.треугольникToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.треугольникToolStripMenuItem.Text = "Треугольник";
             this.треугольникToolStripMenuItem.Click += new System.EventHandler(this.треугольникToolStripMenuItem_Click);
             // 
@@ -301,6 +303,13 @@ namespace LabN8OOP
             this.treeView1.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterCheck);
             this.treeView1.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseDoubleClick);
             // 
+            // липкийОбъектToolStripMenuItem
+            // 
+            this.липкийОбъектToolStripMenuItem.Name = "липкийОбъектToolStripMenuItem";
+            this.липкийОбъектToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.липкийОбъектToolStripMenuItem.Text = "Липкий объект";
+            this.липкийОбъектToolStripMenuItem.Click += new System.EventHandler(this.липкийОбъектToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -350,6 +359,8 @@ namespace LabN8OOP
         private System.Windows.Forms.ToolStripMenuItem сохранитьToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem загрузитьToolStripMenuItem;
         private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem липкийОбъектToolStripMenuItem;
     }
 }
 
