@@ -20,8 +20,7 @@ namespace LabN8OOP
         public Form1()
         {
             InitializeComponent();
-            treeView1.Nodes.Add(new TreeNode("Хранилище"));
-            tree = new TreeViewObj(treeView1);
+            tree = new TreeViewObj(treeView1, repos);
             repos.addObserver(tree);
         }
 
@@ -87,6 +86,7 @@ namespace LabN8OOP
                     else fig = null;
                     if (fig != null && fig.CheckIn(0, pictureBox1.Width, 0, pictureBox1.Height))
                     {
+                        fig.addObserver(tree);
                         repos.addObject(fig);
                         unCheckedMenu();    // Снимаем выделения в меню
                     }
@@ -310,9 +310,23 @@ namespace LabN8OOP
             pictureBox1.Refresh();	// Обновление формы
         }
 
+        private void addObs(CShapes arr)
+        {
+            if (arr is Group)
+                for (int i = 0; i < ((Group)arr).getCount(); ++i)
+                    addObs(((Group)arr).getGroups()[i]);
+            else
+                arr.addObserver(tree);
+        }
+
         private void загрузитьToolStripMenuItem_Click(object sender, EventArgs e)   // Загружаем из файла
         {
             repos.loadShapes("shapes.txt");
+            for (int i = 0; i < repos.getSize(); ++i)
+            {
+                if (!repos.isNull(i))
+                    addObs(repos.getObject(i));
+            }
             pictureBox1.Refresh();	// Обновление формы
         }
 
@@ -320,6 +334,29 @@ namespace LabN8OOP
         {
             repos.saveShapes("shapes.txt");
             pictureBox1.Refresh();	// Обновление формы
+        }
+
+        private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            e.Node.Checked = true;
+            tree.CopyChecked();
+            pictureBox1.Refresh();	// Обновление формы
+        }
+
+        private void treeView1_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            if (treeView1.TopNode.Checked)
+            {
+                treeView1.TopNode.Checked = false;
+            }
+            if (e.Node.Checked)
+            {
+                e.Node.ForeColor = Color.Red;
+            }
+            else
+            {
+                e.Node.ForeColor = Color.Black;
+            }
         }
     }
 }

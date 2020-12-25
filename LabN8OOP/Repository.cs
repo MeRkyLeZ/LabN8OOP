@@ -40,22 +40,25 @@ namespace LabN8OOP
     public class TreeViewObj : CObserver
     {
         private TreeView tree;
-        public TreeViewObj(TreeView treeView)
+        private Repository repos;
+        public TreeViewObj(TreeView treeView, Repository repository)
         {
             tree = treeView;
+            repos = repository;
         }
 
         public override void onSubjectChanged(CSubject who)
         {
             tree.Nodes[0].Nodes.Clear();
-            Repository rep = ((Repository)who);
-            for (int i = 0; i < rep.getSize(); ++i)
+
+            for (int i = 0; i < repos.getSize(); ++i)
             {
-                if (!rep.isNull(i))
+                if (!repos.isNull(i))
                 {
-                    processNode(tree.TopNode, rep.getObject(i));
+                    processNode(tree.TopNode, repos.getObject(i));
                 }
             }
+            SetChecked();
         }
 
         private void processNode(TreeNode tn, CShapes o)
@@ -69,6 +72,34 @@ namespace LabN8OOP
                 }
             }
 
+        }
+
+        private void SetChecked()
+        {
+            int pos = 0;
+            for (int i = 0; i < repos.getSize(); ++i)
+            {
+                if (!repos.isNull(i))
+                {
+                    if (repos.getObject(i).getSelected())
+                        tree.TopNode.Nodes[pos++].Checked = true;
+                    else tree.TopNode.Nodes[pos++].Checked = false;
+                }
+            }
+        }
+
+        public void CopyChecked()
+        {
+            int pos = 0;
+            for (int i = 0; i < repos.getSize(); ++i)
+            {
+                if (!repos.isNull(i))
+                {
+                    if (tree.TopNode.Nodes[pos++].Checked)
+                        repos.getObject(i).setSelected();
+                    else repos.getObject(i).unSelected();
+                }
+            }
         }
     }
 
@@ -125,7 +156,7 @@ namespace LabN8OOP
     }
 
 
-    class Repository : Data   // Хранилище
+    public class Repository : Data   // Хранилище
     {
         public Repository() // Конструктор
         {

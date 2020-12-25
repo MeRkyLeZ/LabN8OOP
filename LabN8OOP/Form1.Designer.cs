@@ -29,6 +29,7 @@ namespace LabN8OOP
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Хранилище");
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.фигурыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -289,11 +290,16 @@ namespace LabN8OOP
             // 
             // treeView1
             // 
-            this.treeView1.CheckBoxes = true;
             this.treeView1.Location = new System.Drawing.Point(667, 27);
             this.treeView1.Name = "treeView1";
+            treeNode1.Name = "Хранилище";
+            treeNode1.Text = "Хранилище";
+            this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode1});
             this.treeView1.Size = new System.Drawing.Size(121, 411);
             this.treeView1.TabIndex = 2;
+            this.treeView1.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterCheck);
+            this.treeView1.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseDoubleClick);
             // 
             // Form1
             // 

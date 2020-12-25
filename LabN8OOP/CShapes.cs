@@ -10,7 +10,7 @@ namespace LabN8OOP
 {
 
 
-    public abstract class CShapes
+    public abstract class CShapes : CSubject
     {
         public abstract void move(int dx, int dy);  // Смещение объекта
         public abstract void draw(Graphics g);  // Зарисовка объекта
@@ -70,6 +70,7 @@ namespace LabN8OOP
             {
                 group[i].draw(g);
             }
+            notifyEveryOne();
         }
 
         public override bool getSelected()
@@ -202,6 +203,7 @@ namespace LabN8OOP
             }
         }
 
+
         private int minSize()   // Получаем минимальный размер объекта группы
         {
             int minsize = int.MaxValue;
@@ -217,6 +219,7 @@ namespace LabN8OOP
             }
             return minsize;
         }
+
 
     }
 
@@ -334,6 +337,7 @@ namespace LabN8OOP
 
                 g.FillEllipse(brush, x - R, y - R, R * 2, R * 2);    // Заливаем элемент
             }
+            notifyEveryOne();
         }
 
         public override void save(StreamWriter stream)
@@ -394,6 +398,7 @@ namespace LabN8OOP
             {
                 g.FillRectangle(brush, x - R, y - R, R * 2, R * 2);    // Заливаем элемент
             }
+            notifyEveryOne();
         }
 
         public override void save(StreamWriter stream)
@@ -460,6 +465,7 @@ namespace LabN8OOP
             {
                 g.FillPolygon(brush, p);   // Заливаем элемент
             }
+            notifyEveryOne();
         }
 
         public override void save(StreamWriter stream)
@@ -480,7 +486,5 @@ namespace LabN8OOP
             col = Color.FromArgb(Convert.ToInt32(str[0]), Convert.ToInt32(str[1]), Convert.ToInt32(str[2]));
             selected = false;
         }
-
-
     }
 }
